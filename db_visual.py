@@ -26,9 +26,9 @@ def subject_selected():
     else:
         label_main['text'] = 'Не выбран класс или день недели'
 
-def save_day():
+def save_day(day):
     #сохранение дня недели
-    pass
+    print(day_lists[day].get(0,END))
 
 
 root = Tk()
@@ -60,7 +60,7 @@ label_day3 = Label(root, width=20, bg='white', fg='black', text='Среда')
 label_day4 = Label(root, width=20, bg='white', fg='black', text='Четверг')
 label_day5 = Label(root, width=20, bg='white', fg='black', text='Пятница')
 day_lists = [Listbox(root, width=20, height=8) for i in range(5)]
-day_list_buttons = [Button(root, text='Сохранить', command=save_day) for i in range(5)]
+day_list_buttons = [Button(root, text='Сохранить', command=lambda x=i: save_day(x)) for i in range(5)]
 
 but_grade = Button(root, text='Выбрать класс', command=class_selected)
 but_day = Button(root, text='Выбрать день', command=day_selected)
