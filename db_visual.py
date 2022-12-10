@@ -1,9 +1,11 @@
 from tkinter import *
 import sqlite3
+from bd_script import *
 
-conn = sqlite3.connect('mydb.db')
-cursor = conn.cursor()
 
+db_init()
+current_day = -1
+current_grade = -1
 
 def class_selected():
     global current_grade
@@ -19,16 +21,22 @@ def day_selected():
 
 def subject_selected():
     sel = subjects_list.curselection()
-    day_lists[current_day].insert(END, all_subjects[sel[0]])
+    if current_day >= 0 and sel:
+        day_lists[current_day].insert(END, all_subjects[sel[0]])
+    else:
+        label_main['text'] = 'Не выбран класс или день недели'
+
+def save_day():
+    #сохранение дня недели
+    pass
 
 
 root = Tk()
-root.geometry("1100x600")
+root.geometry("1150x700")
 
 label_grade = Label(root, width=20, bg='white', fg='black', text='Выберите класс')
 grades_list = Listbox(root, width=20, height=8)
-cursor.execute('SELECT * FROM grades')
-for g in cursor.fetchall():
+for g in all_grades():
     grades_list.insert(*g)
 
 days = {1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота', 7: 'Воскресенье'}.items()
@@ -39,8 +47,8 @@ for d in days:
 
 label_subjects = Label(root, width=20, bg='white', fg='black', text='Список предметов')
 subjects_list = Listbox(root, width=20, height=20)
-cursor.execute('SELECT * FROM subjects')
-all_subjects = cursor.fetchall()
+
+all_subjects = all_subj()
 for g in all_subjects:
     subjects_list.insert(*g)
 subjects_button = Button(root, text='Выбрать', command=subject_selected).grid(row=5, column=0)
@@ -52,7 +60,7 @@ label_day3 = Label(root, width=20, bg='white', fg='black', text='Среда')
 label_day4 = Label(root, width=20, bg='white', fg='black', text='Четверг')
 label_day5 = Label(root, width=20, bg='white', fg='black', text='Пятница')
 day_lists = [Listbox(root, width=20, height=8) for i in range(5)]
-
+day_list_buttons = [Button(root, text='Сохранить', command=save_day) for i in range(5)]
 
 but_grade = Button(root, text='Выбрать класс', command=class_selected)
 but_day = Button(root, text='Выбрать день', command=day_selected)
@@ -73,10 +81,13 @@ label_day3.grid(row=0, column=5)
 label_day4.grid(row=0, column=6)
 label_day5.grid(row=0, column=7)
 label_main.grid(row=3, column=1)
-i = 3
+i = j = 3
 for x in day_lists:
     x.grid(row=1, column=i)
     i += 1
+for x in day_list_buttons:
+    x.grid(row=2, column=j)
+    j += 1
 
 
 root.mainloop()

@@ -8,7 +8,7 @@ from aiogram.types import ReplyKeyboardRemove, \
 
 from config import TOKEN
 import keyb as kb
-import raspisanie
+#import raspisanie
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
