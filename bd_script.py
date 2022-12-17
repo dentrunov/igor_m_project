@@ -1,6 +1,6 @@
 import sqlite3
 
-def  db_init():
+def db_init():
     global cursor, conn
     conn = sqlite3.connect('mydb.db')
     cursor = conn.cursor()
@@ -54,3 +54,9 @@ def all_grades():
 def all_subj():
     cursor.execute('SELECT * FROM subjects')
     return cursor.fetchall()
+
+def db_save_day(*args):
+    print(args)
+
+if __name__ == '__main__':
+    db_init()

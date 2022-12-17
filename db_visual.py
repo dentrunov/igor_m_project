@@ -9,7 +9,7 @@ current_grade = -1
 
 def class_selected():
     global current_grade
-    current_grade = grades_list.curselection()
+    current_grade = grades_list.curselection()[0]
     label_main['text'] = current_grade
 
 
@@ -28,7 +28,8 @@ def subject_selected():
 
 def save_day(day):
     #сохранение дня недели
-    print(day_lists[day].get(0,END))
+    #print(day_lists[day].get(0, END))
+    db_save_day(day_lists[day].get(0, END))
 
 
 root = Tk()
