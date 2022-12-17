@@ -29,7 +29,7 @@ def subject_selected():
 def save_day(day):
     #сохранение дня недели
     #print(day_lists[day].get(0, END))
-    db_save_day(day_lists[day].get(0, END))
+    db_save_day(current_day, current_grade, day_lists[day].get(0, END))
 
 
 root = Tk()

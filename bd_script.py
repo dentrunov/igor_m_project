@@ -55,8 +55,27 @@ def all_subj():
     cursor.execute('SELECT * FROM subjects')
     return cursor.fetchall()
 
-def db_save_day(*args):
-    print(args)
+def db_save_day(wd, gr, args):
+    cursor.execute('SELECT id FROM raspisanie ORDER BY id DESC LIMIT 1')
+    result = cursor.fetchone()
+    if result:
+        first_id = result[0]
+    else:
+        first_id = 0
+    raw = []
+    t = ['8:30', '9:20', '10:20', '11:10', '12:00', '12:50', '13:40', '14:20']
+    t_num = 0
+    for x in args:
+        raw += [(first_id, x[0], wd, t[t_num], gr)]
+        first_id += 1
+        t_num += 1
+    print(*raw, sep='\n')
+    cursor.executemany('INSERT INTO raspisanie (id, subject, weekday, time, grade) VALUES (?, ?, ?, ?, ?);', raw)
+
+def check_db():
+    cursor.execute('SELECT * FROM raspisanie')
+    print(cursor.fetchall())
 
 if __name__ == '__main__':
     db_init()
+    check_db()
