@@ -9,8 +9,20 @@ current_grade = -1
 
 def class_selected():
     global current_grade
+
     current_grade = grades_list.curselection()[0]
     label_main['text'] = current_grade
+    # Забираем данные из БД
+    d = 0
+    for dl in day_lists:
+        dl.delete(0, END)
+        les = get_lessons(current_grade, d)
+
+        for l in les:
+            #print(all_subjects[int(l[1])])
+            dl.insert(END, all_subjects[int(l[1])-1])
+        d += 1
+        #выводим их в day_list
 
 
 def day_selected():
@@ -50,6 +62,7 @@ label_subjects = Label(root, width=20, bg='white', fg='black', text='Списо�
 subjects_list = Listbox(root, width=20, height=20)
 
 all_subjects = all_subj()
+print(all_subjects)
 for g in all_subjects:
     subjects_list.insert(*g)
 subjects_button = Button(root, text='Выбрать', command=subject_selected).grid(row=5, column=0)
@@ -60,7 +73,11 @@ label_day2 = Label(root, width=20, bg='white', fg='black', text='Вторник'
 label_day3 = Label(root, width=20, bg='white', fg='black', text='Среда')
 label_day4 = Label(root, width=20, bg='white', fg='black', text='Четверг')
 label_day5 = Label(root, width=20, bg='white', fg='black', text='Пятница')
+
 day_lists = [Listbox(root, width=20, height=8) for i in range(5)]
+
+
+
 day_list_buttons = [Button(root, text='Сохранить', command=lambda x=i: save_day(x)) for i in range(5)]
 
 but_grade = Button(root, text='Выбрать класс', command=class_selected)

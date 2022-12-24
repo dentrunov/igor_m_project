@@ -59,7 +59,7 @@ def db_save_day(wd, gr, args):
     cursor.execute('SELECT id FROM raspisanie ORDER BY id DESC LIMIT 1')
     result = cursor.fetchone()
     if result:
-        first_id = result[0]
+        first_id = result[0] + 1
     else:
         first_id = 0
     raw = []
@@ -69,8 +69,12 @@ def db_save_day(wd, gr, args):
         raw += [(first_id, x[0], wd, t[t_num], gr)]
         first_id += 1
         t_num += 1
-    print(*raw, sep='\n')
     cursor.executemany('INSERT INTO raspisanie (id, subject, weekday, time, grade) VALUES (?, ?, ?, ?, ?);', raw)
+    conn.commit()
+
+def get_lessons(grade, day):
+    cursor.execute('SELECT * FROM raspisanie WHERE grade=? AND weekday=?', (grade, day))
+    return cursor.fetchall()
 
 def check_db():
     cursor.execute('SELECT * FROM raspisanie')
